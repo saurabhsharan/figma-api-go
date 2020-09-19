@@ -1,4 +1,4 @@
-module github.com/junkpiano/figma-api-go
+module github.com/saurabhsharan/figma-api-go
 
 go 1.12
 
