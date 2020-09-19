@@ -49,7 +49,7 @@ func (c *Client) newRequest(ctx context.Context, method, spath string, body io.R
 
 	req = req.WithContext(ctx)
 
-	req.Header.Set("X-Figma-Token", c.token)
+	req.Header.Set("Authorization", "Bearer "+c.token)
 	req.Header.Set("User-Agent", userAgent)
 
 	return req, nil
