@@ -3,6 +3,7 @@ package figma
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 )
 
 func UnmarshalFile(data []byte) (*File, error) {
@@ -168,6 +169,8 @@ type Type string
 const (
 	Rectangle Type = "RECTANGLE"
 	Text      Type = "TEXT"
+	Canvas    Type = "CANVAS"
+	Frame     Type = "FRAME"
 )
 
 type StyleType string
@@ -184,8 +187,8 @@ type FileNodes struct {
 	Nodes        map[string]FileNode `json:"nodes,omitempty"`
 }
 
-func (c *Client) GetFile(ctx context.Context, fileKey string) (*File, error) {
-	req, _ := c.newRequest(ctx, "GET", "/v1/files/"+fileKey, nil)
+func (c *Client) GetFile(ctx context.Context, fileKey string, depth int) (*File, error) {
+	req, _ := c.newRequest(ctx, "GET", "/v1/files/"+fileKey+"?depth="+strconv.Itoa(depth), nil)
 	res, err := c.send(ctx, req)
 
 	if err != nil {
