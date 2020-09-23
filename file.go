@@ -58,30 +58,30 @@ type Color struct {
 }
 
 type Document struct {
-	ID                      string              `json:"id"`
-	Name                    string              `json:"name"`
-	Type                    Type                `json:"type"`
-	BlendMode               BlendMode           `json:"blendMode"`
-	Opacity                 *float64            `json:"opacity,omitempty"`
-	AbsoluteBoundingBox     AbsoluteBoundingBox `json:"absoluteBoundingBox"`
-	Constraints             Constraints         `json:"constraints"`
-	Fills                   []FillElement       `json:"fills"`
-	Strokes                 []interface{}       `json:"strokes"`
-	StrokeWeight            int64               `json:"strokeWeight"`
-	StrokeAlign             StrokeAlign         `json:"strokeAlign"`
-	ExportSettings          []interface{}       `json:"exportSettings"`
-	Effects                 []interface{}       `json:"effects"`
-	Characters              *string             `json:"characters,omitempty"`
-	Style                   *Style              `json:"style,omitempty"`
-	CharacterStyleOverrides []interface{}       `json:"characterStyleOverrides"`
-	StyleOverrideTable      *Components         `json:"styleOverrideTable,omitempty"`
-	StrokeJoin              *StrokeJoin         `json:"strokeJoin,omitempty"`
-	StrokeMiterAngle        interface{}         `json:"strokeMiterAngle"`
-	Styles                  *Styles             `json:"styles,omitempty"`
-	CornerRadius            *int64              `json:"cornerRadius,omitempty"`
-	Children                []Document          `json:"children,omitempty"`
-	BackgroundColor         Color               `json:"backgroundColor"`
-	PrototypeStartNodeID    interface{}         `json:"prototypeStartNodeID"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Type Type   `json:"type"`
+	// BlendMode               BlendMode           `json:"blendMode"`
+	// Opacity                 *float64            `json:"opacity,omitempty"`
+	// AbsoluteBoundingBox     AbsoluteBoundingBox `json:"absoluteBoundingBox"`
+	// Constraints             Constraints         `json:"constraints"`
+	// Fills                   []FillElement       `json:"fills"`
+	// Strokes                 []interface{}       `json:"strokes"`
+	// StrokeWeight            int64               `json:"strokeWeight"`
+	// StrokeAlign             StrokeAlign         `json:"strokeAlign"`
+	ExportSettings []interface{} `json:"exportSettings"`
+	// Effects                 []interface{} `json:"effects"`
+	// Characters              *string       `json:"characters,omitempty"`
+	// Style                   *Style        `json:"style,omitempty"`
+	// CharacterStyleOverrides []interface{} `json:"characterStyleOverrides"`
+	// StyleOverrideTable      *Components   `json:"styleOverrideTable,omitempty"`
+	// StrokeJoin              *StrokeJoin   `json:"strokeJoin,omitempty"`
+	// StrokeMiterAngle        interface{}   `json:"strokeMiterAngle"`
+	// Styles                  *Styles       `json:"styles,omitempty"`
+	// CornerRadius            *int64        `json:"cornerRadius,omitempty"`
+	Children []Document `json:"children,omitempty"`
+	// BackgroundColor         Color         `json:"backgroundColor"`
+	PrototypeStartNodeID interface{} `json:"prototypeStartNodeID"`
 }
 
 type AbsoluteBoundingBox struct {
@@ -188,8 +188,12 @@ type FileNodes struct {
 }
 
 func (c *Client) GetFile(ctx context.Context, fileKey string, depth int) (*File, error) {
-	req, _ := c.newRequest(ctx, "GET", "/v1/files/"+fileKey+"?depth="+strconv.Itoa(depth), nil)
+	req, _ := c.newRequest(ctx, "GET", "/v1/files/"+fileKey, nil)
 	res, err := c.send(ctx, req)
+
+	q := req.URL.Query()
+	q.Add("depth", strconv.Itoa(depth))
+	req.URL.RawQuery = q.Encode()
 
 	if err != nil {
 		return nil, err
